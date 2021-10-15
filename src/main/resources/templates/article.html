@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:>
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
+</head>
+<body>
+
+
+<form id="form_search" th:action="@{/article/getArticlePage}" th:object="${cmd}" method="get">
+    <div class="search_content">
+        <input type="hidden" name="rows" value="10"/>
+        <input type="hidden" name="page" id="indexPage" value="1"/>
+        <input type="text" th:field="*{searchValue}" placeholder="输入查询"/>
+        <select th:field="*{status}" th:value="${cmd.status}" placeholder="请选择状态">
+            <option value="" selected="selected">请选择状态</option>
+            <option th:each="st:${statusList}" th:value="${st.key}" th:if="${st.key eq cmd.status}?'selected':''" th:text="${st.value}"></option>
+        </select>
+        <input type="submit" value="查询">
+    </div>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>标题</th>
+        <th>内容</th>
+        <th>用户名</th>
+        <th>日期</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="a:${page.records}">
+        <td th:text="${a.title}"></td>
+        <td th:text="${a.content}"></td>
+        <td th:text="${a.createUserName}"></td>
+        <td th:text="${#temporals.format(a.updateTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td th:text="${a.content}"></td>
+    </tr>
+    </tbody>
+
+</table>
+
+</body>
+</html>

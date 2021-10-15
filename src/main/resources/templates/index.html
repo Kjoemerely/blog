@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
+</head>
+<body>
+    <h2>当前位置导航</h2>
+
+    <header>
+        <h2>image_location</h2>
+    </header>
+
+    <section>
+        <nav>
+            <ul>
+                <li>
+                    <span><a th:href="@{/article/getArticlePage}" target="iframe_a">文章信息</a></span>
+                </li>
+                <li>
+                    <span><a href="#">用户信息</a></span>
+                </li>
+                <li>
+                    <span><a href="#">日志信息</a></span>
+                </li>
+            </ul>
+        </nav>
+
+
+        <article>
+            <iframe name="iframe_a" src="index.html" style="border:none;" title="Iframe Example" width="1715px" height="500px">
+                <table class="table_template">
+                    <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>内容</th>
+                        <th>用户名</th>
+                        <th>日期</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="a:${page.records}">
+                        <td th:text="${a.title}"></td>
+                        <td th:text="${a.content}"></td>
+                        <td th:text="${a.createUserName}"></td>
+                        <td th:text="${#temporals.format(a.updateTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${a.content}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </iframe>
+            </article>
+
+
+    </section>
+
+
+    <footer>
+        版权部分
+    </footer>
+</body>
+</html>

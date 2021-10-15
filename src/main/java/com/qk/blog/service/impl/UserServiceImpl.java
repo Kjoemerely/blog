@@ -93,9 +93,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserModel> implemen
         result.setData(userModel);
         return result;
     }
+
+    /**
+     * 用户信息修改
+     *
+     * @param result 通用返回结果
+     * @param userVo 用户信息
+     * @return 通用返回结果
+     * @throws Exception 异常信息
+     */
+    @Override
+    public Result edit(Result result, LoginUserVo userVo) throws Exception {
+        userMapper.updateById(userVo);
+        return result;
+    }
 }
-
-
-
-
-

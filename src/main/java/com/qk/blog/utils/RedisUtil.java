@@ -1,16 +1,23 @@
 package com.qk.blog.utils;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Resource;
+
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
 /**
  * Redis工具类
+ * 
  * @author lizhen
  */
 @Service
@@ -103,7 +110,6 @@ public class RedisUtil {
             }
         }
     }
-
 
     // ============================String=============================
 
@@ -596,11 +602,9 @@ public class RedisUtil {
         }
     }
 
+    /************************** 锁 ******************************/
 
-    /**************************锁******************************/
-
-
-//    public static final String LOCK_PREFIX = "redis_lock";
+    // public static final String LOCK_PREFIX = "redis_lock";
     public static final int LOCK_EXPIRE = 30000; // ms
 
     /**
@@ -618,7 +622,6 @@ public class RedisUtil {
             long expireAt = System.currentTimeMillis() + LOCK_EXPIRE + 1;
             Boolean acquire = connection.setNX(lock.getBytes(), String.valueOf(expireAt).getBytes());
 
-
             if (acquire) {
                 return true;
             } else {
@@ -631,7 +634,8 @@ public class RedisUtil {
 
                     if (expireTime < System.currentTimeMillis()) {
                         // 如果锁已经过期
-                        byte[] oldValue = connection.getSet(lock.getBytes(), String.valueOf(System.currentTimeMillis() + LOCK_EXPIRE + 1).getBytes());
+                        byte[] oldValue = connection.getSet(lock.getBytes(),
+                                String.valueOf(System.currentTimeMillis() + LOCK_EXPIRE + 1).getBytes());
                         // 防止死锁
                         return Long.parseLong(new String(oldValue)) < System.currentTimeMillis();
                     }
@@ -652,9 +656,10 @@ public class RedisUtil {
 
     /**
      * 根据key通配查询所有值
+     * 
      * @param key
      */
-    public Set<String> keys(String key){
+    public Set<String> keys(String key) {
         return redisTemplate.keys(key + "*");
     }
 

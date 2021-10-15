@@ -1,8 +1,13 @@
 package com.qk.blog.service;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qk.blog.common.PageQueryCmd;
 import com.qk.blog.model.ArticleModel;
+import com.qk.blog.vo.ArticlePageVo;
 
 /**
  * @author qk
@@ -15,6 +20,13 @@ public interface ArticleService extends IService<ArticleModel> {
 
     int batchInsert(List<ArticleModel> list);
 
+    /**
+     * 文章分页
+     *
+     * @param cmd 查询条件
+     * @return 文章分页
+     */
+    IPage<ArticlePageVo> getArticlePage(PageQueryCmd cmd);
 }
 
 

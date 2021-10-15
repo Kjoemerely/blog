@@ -12,6 +12,8 @@ spring:
     host: 127.0.0.1
     port: 6379
     timeout: 2000
+  thymeleaf:
+    cache: false
 logging:
     file:
         path: d:\home\log-blog
@@ -22,10 +24,9 @@ logging:
         dateformat: yyyy-MM-dd HH:mm:ss.SSS
     level:
         # 目录日志级别
-        org.springframework: debug
+        org.springframework: info
         org.apache.ibatis: debug
-        org.springframework.transaction: debug
-        org.springframework.jdbc: debug
+        org.springframework.transaction: info
+        org.springframework.jdbc: info
         org.mybatis: debug
         java.sql: debug
-        com.cptec.platform: debug

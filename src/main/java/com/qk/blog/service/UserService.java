@@ -36,4 +36,13 @@ public interface UserService extends IService<UserModel> {
      * @throws Exception 异常信息
      */
     Result login(Result result, String username, String password) throws Exception;
+
+    /**
+     * 用户信息修改
+     *
+     * @param userVo 用户信息
+     * @return 通用返回结果
+     * @throws Exception 异常信息
+     */
+    Result edit(Result result, LoginUserVo userVo) throws Exception;
 }
