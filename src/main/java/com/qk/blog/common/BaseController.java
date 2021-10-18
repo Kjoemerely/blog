@@ -1,7 +1,7 @@
 package com.qk.blog.common;
 
 import com.qk.blog.exception.ResultException;
-import com.qk.blog.service.LogService;
+import com.qk.blog.service.SysLogService;
 import com.qk.blog.service.UserService;
 import com.qk.blog.vo.LoginUserVo;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class BaseController {
     @Resource
     private UserService userService;
     @Resource
-    private LogService logService;
+    private SysLogService sysLogService;
 
     /**
      * Logger日志
@@ -55,6 +55,7 @@ public class BaseController {
             result.setMessage(Result.RESULT_ERROR_MSG);
         }
         log.error("系统异常!", e);
+        e.printStackTrace();
         return result;
     }
 
@@ -82,7 +83,7 @@ public class BaseController {
     @ExceptionHandler(Exception.class)
     public Object exceptionHandler(Exception e) {
         if (!(e instanceof ResultException)) {
-            logService.addExceptionLog(e);
+            sysLogService.addExceptionLog(e);
         }
         e.printStackTrace();
         log.error(getClass() + "异常:{}", e.getMessage());

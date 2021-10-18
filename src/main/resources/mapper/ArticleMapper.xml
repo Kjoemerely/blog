@@ -102,11 +102,11 @@
         <result column="tag_name" property="tagNames"/>
         <result column="commentCount" property="commentCount"/>
     </resultMap>
-    <select id="getArticlePage" resultType="com.qk.blog.vo.ArticlePageVo">
+    <select id="getArticlePage" resultMap="pageMap">
         SELECT a.*,
                c.NAME category_name,
-               t.NAME,
-               IFNULL(cmt.num, 0)
+               t.NAME tag_name,
+               IFNULL(cmt.num, 0) commentCount
         FROM article a
                      LEFT JOIN category c ON c.id = a.category_id
                      LEFT JOIN (
@@ -119,8 +119,27 @@
                      LEFT JOIN (SELECT article_id, count(*) num from COMMENT GROUP BY article_id) cmt
                 ON cmt.article_id = a.id
                 WHERE a.status = 'NORMAL'
-        <if test="searchValue != null and searchValue != ''">
+        <if test="cmd.searchValue != null and cmd.searchValue != ''">
             and a.title like concat('%', #{searchValue,jdbcType=VARCHAR}, '%')
         </if>
+    </select>
+
+    <select id="getById" resultMap="pageMap">
+        SELECT a.*,
+               c.NAME category_name,
+               t.NAME tag_name,
+               IFNULL(cmt.num, 0) commentCount
+        FROM article a
+                     LEFT JOIN category c ON c.id = a.category_id
+                     LEFT JOIN (
+                SELECT r.article_id,
+                       GROUP_CONCAT(t.NAME) name
+                FROM tag t
+                             LEFT JOIN article_tag_rel r ON r.tag_id = t.id
+                GROUP BY r.article_id
+                ) t ON t.article_id = a.id
+                     LEFT JOIN (SELECT article_id, count(*) num from COMMENT GROUP BY article_id) cmt
+                ON cmt.article_id = a.id
+        WHERE a.status = 'NORMAL'
     </select>
 </mapper>

@@ -1,25 +1,33 @@
 package com.qk.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.qk.blog.vo.LoginUserVo;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qk.blog.common.Result;
+import com.qk.blog.dao.UserMapper;
 import com.qk.blog.enums.ErrorResultEnum;
+import com.qk.blog.enums.LogTypeEnum;
 import com.qk.blog.enums.StatusEnum;
 import com.qk.blog.exception.ResultException;
+import com.qk.blog.model.SysLogModel;
 import com.qk.blog.model.UserModel;
+import com.qk.blog.service.SysLogService;
 import com.qk.blog.service.TokenService;
-import com.qk.blog.utils.Md5Util;
-import com.qk.blog.utils.RedisUtil;
-import com.qk.blog.utils.TokenUtil;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.qk.blog.dao.UserMapper;
 import com.qk.blog.service.UserService;
+import com.qk.blog.utils.*;
+import com.qk.blog.vo.LoginUserVo;
+import com.qk.blog.vo.UserVo;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author qk
@@ -34,6 +42,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserModel> implemen
     private UserMapper userMapper;
     @Resource
     private RedisUtil redisUtil;
+    @Resource
+    private SysLogService sysLogService;
 
     @Override
     public int updateBatch(List<UserModel> list) {
@@ -89,9 +99,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserModel> implemen
         if (userModel == null) {
             result.setCode(Result.RESULT_ERROR);
             result.setMessage("登录失败！");
+            return result;
         }
-        result.setData(userModel);
+        //获取请求IP
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        String loginIp = NetworkUtil.getIpAddress(request);
+        LoginUserVo loginUserVo = new LoginUserVo();
+        BeanUtils.copyProperties(userModel, loginUserVo);
+        loginUserVo.setToken(UuidUtil.getUuid());
+        result.setData(loginUserVo);
+        // 写入日志
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SysLogModel sysLogModel = new SysLogModel();
+        sysLogModel.setFirstType(LogTypeEnum.USER.getCode());
+        sysLogModel.setFirstTypeName(LogTypeEnum.USER.getMessage());
+        sysLogModel.setSecondType(LogTypeEnum.LOGIN.getCode());
+        sysLogModel.setSecondTypeName(LogTypeEnum.LOGIN.getMessage());
+        sysLogModel.setBusinessId(userModel.getId());
+        sysLogModel.setBusinessName(userModel.getUserName());
+        sysLogModel.setContent(userModel.getUserName() + "在" + sdf.format(LocalDateTime.now()) + "登录了系统");
+        sysLogModel.setIpAddress(loginIp);
+        sysLogModel.setHost(WebContextUtil.getRequest().getRemoteHost());
+        sysLogModel.setBrowser(Objects.requireNonNull(RequestUtil.getBrowser(request)).getName());
+        sysLogModel.setProtocol(request.getProtocol());
+        sysLogService.addSysLog(sysLogModel);
         return result;
+    }
+
+    /**
+     * 用户注册
+     *
+     * @param result 通用返回结果
+     * @param userVo 用户信息
+     * @return 通用返回结果
+     * @throws Exception 异常信息
+     */
+    @Override
+    public Result register(Result result, UserVo userVo) throws Exception {
+        return null;
     }
 
     /**

@@ -1,21 +1,17 @@
 package com.qk.blog.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.qk.blog.common.PageQueryCmd;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qk.blog.dao.ArticleMapper;
 import com.qk.blog.model.ArticleModel;
+import com.qk.blog.service.ArticleService;
 import com.qk.blog.vo.ArticlePageVo;
+import com.qk.blog.vo.ArticleSearchCmd;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
-import com.qk.blog.dao.ArticleMapper;
-import com.qk.blog.service.ArticleService;
-
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author qk
@@ -44,10 +40,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, ArticleModel>
      * @return 文章分页
      */
     @Override
-    public IPage<ArticlePageVo> getArticlePage(PageQueryCmd cmd) {
+    public IPage<ArticlePageVo> getArticlePage(ArticleSearchCmd cmd) {
         Page<ArticlePageVo> page = new Page<>(cmd.getPage(), cmd.getRows());
         IPage<ArticlePageVo> iPage = articleMapper.getArticlePage(page, cmd);
         return iPage;
+    }
+
+    @Override
+    public ArticlePageVo getById(Long id) {
+        return articleMapper.getById(id);
     }
 }
 

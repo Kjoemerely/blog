@@ -4,6 +4,7 @@ import com.qk.blog.annotation.IgnoreSecurity;
 import com.qk.blog.common.BaseController;
 import com.qk.blog.common.Result;
 import com.qk.blog.service.TokenService;
+import com.qk.blog.utils.TokenUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -34,7 +35,7 @@ public class SecurityAspect extends BaseController {
     @Around("pointCut()")
     public Object execute(ProceedingJoinPoint pjp) throws Throwable {
         //通过token获取用户信息
-        String token = "GetTokenUtil.getToken()";
+        String token = TokenUtil.getToken();
         // 从切点上获取目标方法
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
         log.debug("methodSignature : " + methodSignature);
@@ -47,7 +48,7 @@ public class SecurityAspect extends BaseController {
 
         Result result = tokenService.checkLoginUser(token);
         if (result != null && !Result.RESULT_SUCCESS.equals(result.getCode())) {
-            return result;
+            return pjp.proceed();
         }
 
         // 调用目标方法
