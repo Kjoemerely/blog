@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns: xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>文章详情</title>
+    <link rel="stylesheet" th:href="@{/WEB-INF/css/bootstrap.css}"/>
+    <link rel="stylesheet" th:href="@{/static/css/index.css}"/>
+</head>
+<body>
+
+
+<form id="form_search" method="get" th:action="@{/article/getArticlePage}" th:object="${cmd}">
+    <div class="search_content">
+        <input name="rows" type="hidden" value="10"/>
+        <input id="indexPage" name="page" type="hidden" value="1"/>
+        <input placeholder="输入查询" th:field="*{searchValue}" type="text"/>
+        <select placeholder="请选择状态" th:field="*{status}" th:value="${cmd.status}">
+            <option selected="selected" value="">请选择状态</option>
+            <option th:each="st:${statusList}" th:if="${st.key eq cmd.status}?'selected':''" th:text="${st.value}" th:value="${st.key}"></option>
+        </select>
+        <input type="submit" value="查询">
+    </div>
+</form>
+
+<table>
+    <tr>标题：<td th:text="${vo.title}"></td> </tr>
+    <tr><td th:text="${vo.content}"></td> </tr>
+</table>
+
+</body>
+</html>

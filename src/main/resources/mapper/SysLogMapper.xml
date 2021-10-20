@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qk.blog.dao.SysLogMapper">
+  <resultMap id="BaseResultMap" type="com.qk.blog.model.SysLogModel">
+    <!--@mbg.generated-->
+    <!--@Table sys_log-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="first_type" jdbcType="VARCHAR" property="firstType" />
+    <result column="first_type_name" jdbcType="VARCHAR" property="firstTypeName" />
+    <result column="second_type" jdbcType="VARCHAR" property="secondType" />
+    <result column="second_type_name" jdbcType="VARCHAR" property="secondTypeName" />
+    <result column="business_id" jdbcType="BIGINT" property="businessId" />
+    <result column="business_name" jdbcType="VARCHAR" property="businessName" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="ip_address" jdbcType="VARCHAR" property="ipAddress" />
+    <result column="host" jdbcType="VARCHAR" property="host" />
+    <result column="browser" jdbcType="VARCHAR" property="browser" />
+    <result column="protocol" jdbcType="VARCHAR" property="protocol" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, first_type, first_type_name, second_type, second_type_name, business_id, business_name, 
+    content, ip_address, `host`, browser, protocol
+  </sql>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update sys_log
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="first_type = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.firstType,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="first_type_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.firstTypeName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="second_type = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.secondType,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="second_type_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.secondTypeName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="business_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.businessId,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="business_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.businessName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="content = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.content,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="ip_address = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.ipAddress,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="`host` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.host,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="browser = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.browser,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="protocol = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.protocol,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into sys_log
+    (first_type, first_type_name, second_type, second_type_name, business_id, business_name, 
+      content, ip_address, `host`, browser, protocol)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.firstType,jdbcType=VARCHAR}, #{item.firstTypeName,jdbcType=VARCHAR}, #{item.secondType,jdbcType=VARCHAR}, 
+        #{item.secondTypeName,jdbcType=VARCHAR}, #{item.businessId,jdbcType=BIGINT}, #{item.businessName,jdbcType=VARCHAR}, 
+        #{item.content,jdbcType=VARCHAR}, #{item.ipAddress,jdbcType=VARCHAR}, #{item.host,jdbcType=VARCHAR}, 
+        #{item.browser,jdbcType=VARCHAR}, #{item.protocol,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+</mapper>
