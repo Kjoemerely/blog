@@ -11,10 +11,13 @@ public enum StatusEnum {
     /**
      * 暂停
      */
-    PAUSE("PAUSE","暂停"),
-    BAN("BAN","封禁"),
-    NORMAL("NORMAL","正常"),
-    DELETED("DELETED","已删除"),
+    PAUSE("PAUSE", "暂停"),
+    BAN("BAN", "封禁"),
+    NORMAL("NORMAL", "正常"),
+    DELETED("DELETED", "已删除"),
+    DRAFT("DRAFT", "草稿"),
+    ENABLE("ENABLE", "允许"),
+    DISABLE("DISABLE", "禁止"),
     ;
 
     private String code;

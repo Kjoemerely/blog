@@ -2,9 +2,11 @@ package com.qk.blog.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qk.blog.common.Result;
 import com.qk.blog.model.ArticleModel;
 import com.qk.blog.vo.ArticlePageVo;
 import com.qk.blog.vo.ArticleSearchCmd;
+import com.qk.blog.vo.ArticleVo;
 
 import java.util.List;
 
@@ -30,6 +32,8 @@ public interface ArticleService extends IService<ArticleModel> {
     ArticlePageVo getById(Long id);
 
     Integer getArticleCount();
+
+    Result saveArticle(Result result, ArticleVo vo) throws Exception;
 }
 
 

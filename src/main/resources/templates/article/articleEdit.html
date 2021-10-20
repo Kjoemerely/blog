@@ -28,9 +28,11 @@
                         <!-- 几个基础的输入框，名称、分类等输入框 -->
                         <form id="blogForm" onsubmit="return false;">
                             <div class="form-group" style="display:flex;">
-                                <input id="id" name="id" th:value="${blog != null and blog.id != null } ? ${blog.id} : ''"
+                                <input id="id" name="id"
+                                       th:value="${blog != null and blog.id != null } ? ${blog.id} : ''"
                                        type="hidden">
-                                <input class="form-control col-sm-6" id="blogTitle" name="blogTitle" placeholder="*请输入文章标题(必填)"
+                                <input class="form-control col-sm-6" id="blogTitle" name="blogTitle"
+                                       placeholder="*请输入文章标题(必填)"
                                        required="true"
                                        th:value="${blog != null and blog.title != null } ? ${blog.title} : ''"
                                        type="text">
@@ -41,10 +43,10 @@
                                        type="text">
                             </div>
                             <div class="form-group" style="display:flex;">
-                                <input class="form-control col-sm-6" id="blogSubUrl" name="blogSubUrl"
-                                       placeholder="请输入自定义路径,如:springboot-mybatis,默认为id"
-                                       th:value="${blog != null and blog.blogSubUrl!=null }?${blog.blogSubUrl}: ''"
-                                       type="text"> &nbsp;&nbsp;
+                                <!--                                <input class="form-control col-sm-6" id="blogSubUrl" name="blogSubUrl"-->
+                                <!--                                       placeholder="请输入自定义路径,如:springboot-mybatis,默认为id"-->
+                                <!--                                       th:value="${blog != null and blog.blogSubUrl!=null }?${blog.blogSubUrl}: ''"-->
+                                <!--                                       type="text"> &nbsp;&nbsp;-->
                                 <select class="form-control select2" data-placeholder="请选择分类..." id="categoryId"
                                         style="width: 100%;">
                                     <th:block th:if="${null == categories}">
@@ -52,7 +54,8 @@
                                     </th:block>
                                     <th:block th:unless="${null == categories}">
                                         <th:block th:each="c : ${categories}">
-                                            <option th:selected="${null != blog and null != blog.categoryId and blog.categoryId == c.id} ? true : false" th:text="${c.name}"
+                                            <option th:selected="${null != blog and null != blog.categoryId and blog.categoryId == c.id} ? true : false"
+                                                    th:text="${c.name}"
                                                     th:value="${c.id}">
                                                 >
                                             </option>
@@ -62,7 +65,7 @@
                             </div>
                             <div class="form-group" id="blog-editormd">
                                 <textarea style="display:none;"
-                                          th:utext="${blog != null and blog.content !=null}?${blog.content}: ''"></textarea>
+                                          th:utext="${blog != null and blog.content != null} ? ${blog.content} : ''"></textarea>
                             </div>
                             <div class="form-group">
                                 <!-- 按钮 -->
@@ -94,12 +97,12 @@
                                 <div class="form-group">
                                     <div class="col-sm-4">
                                         <th:block th:if="${null == blog}">
-                                            <img id="coverImage" src="/admin/dist/img/img-upload.png"
+                                            <img id="coverImage" src="/static/admin/dist/img/img-upload.png"
                                                  style="height: 64px;width: 64px;">
                                         </th:block>
                                         <th:block th:unless="${null == blog}">
                                             <img id="coverImage" style="width:160px ;height: 120px;display:block;"
-                                                 th:src="${blog.blogCoverImage}">
+                                                 th:src="${blog.coverImage}">
                                         </th:block>
                                     </div>
                                 </div>
@@ -117,20 +120,25 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label">文章状态:&nbsp;</label>
-                                    <input checked=true id="publish" name="blogStatus"
-                                           th:checked="${null==blog||(null !=blog and null !=blog.blogStatus and blog.blogStatus==1)} ?true:false"
+                                    <input checked=true id="publish" name="status"
+                                           th:checked="${null == blog || (null != blog and null != blog.status and blog.status == 'NORMAL' )} ?true:false"
                                            type="radio"
-                                           value="1"/>&nbsp;发布&nbsp;
-                                    <input id="draft" name="blogStatus" th:checked="${null !=blog and null !=blog.blogStatus and blog.blogStatus==0} ?true:false" type="radio"
-                                           value="0"/>&nbsp;草稿&nbsp;
+                                           value="NORMAL"/>&nbsp;发布&nbsp;
+                                    <input id="draft" name="status"
+                                           th:checked="${null != blog and null !=blog.status and blog.status == 'DRAFT' } ?true:false"
+                                           type="radio"
+                                           value="DRAFT"/>&nbsp;草稿&nbsp;
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label">是否允许评论:&nbsp;</label>
-                                    <input checked=true id="enableCommentTrue" name="enableComment" th:checked="${null==blog||(null !=blog and null !=blog.enableComment and blog.enableComment==0)} ?true:false"
+                                    <input checked=true id="enableCommentTrue" name="enableComment"
+                                           th:checked="${null == blog || (null != blog and null !=blog.enableComment and blog.enableComment == 'ENABLE')} ? true : false"
                                            type="radio"
-                                           value="0"/>&nbsp;是&nbsp;
-                                    <input id="enableCommentFalse" name="enableComment" th:checked="${null !=blog and null !=blog.enableComment and blog.enableComment==1} ?true:false" type="radio"
-                                           value="1"/>&nbsp;否&nbsp;
+                                           value="ENABLE"/>&nbsp;是&nbsp;
+                                    <input id="enableCommentFalse" name="enableComment"
+                                           th:checked="${null != blog and null != blog.enableComment and blog.enableComment == 'DISABLE'} ? true:false"
+                                           type="radio"
+                                           value="DISABLE"/>&nbsp;否&nbsp;
                                 </div>
                             </form>
                         </div>

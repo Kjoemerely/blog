@@ -1,6 +1,7 @@
 package com.qk.blog.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.qk.blog.common.Result;
 import com.qk.blog.enums.StatusEnum;
 import com.qk.blog.model.ArticleModel;
 import com.qk.blog.service.ArticleService;
@@ -8,12 +9,14 @@ import com.qk.blog.service.CategoryService;
 import com.qk.blog.utils.EnumUtil;
 import com.qk.blog.vo.ArticlePageVo;
 import com.qk.blog.vo.ArticleSearchCmd;
+import com.qk.blog.vo.ArticleVo;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -59,7 +62,19 @@ public class ArticleController {
         }
         request.setAttribute("blog", article);
         request.setAttribute("categories", categoryService.getCategoryCount());
-        return "admin/edit";
+        return "article/articleEdit";
+    }
+
+    @GetMapping("/save")
+    @ResponseBody
+    public Result save(Result result, @RequestBody ArticleVo vo) {
+        try {
+            result = articleService.saveArticle(result, vo);
+        } catch (Exception e) {
+            result.setCode(Result.RESULT_ERROR);
+            result.setMessage("保存文章失败！");
+        }
+        return result;
     }
 
     @GetMapping("getById")

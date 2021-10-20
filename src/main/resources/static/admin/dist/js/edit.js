@@ -189,7 +189,7 @@ $('#saveButton').click(function () {
         url: url,
         data: data,
         success: function (result) {
-            if (result.resultCode == '0') {
+            if (result.code == '0') {
                 $('#articleModal').modal('hide');
                 swal({
                     title: swlMessage,

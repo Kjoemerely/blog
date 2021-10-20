@@ -4,12 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qk.blog.common.Result;
 import com.qk.blog.dao.ArticleMapper;
 import com.qk.blog.enums.StatusEnum;
 import com.qk.blog.model.ArticleModel;
 import com.qk.blog.service.ArticleService;
 import com.qk.blog.vo.ArticlePageVo;
 import com.qk.blog.vo.ArticleSearchCmd;
+import com.qk.blog.vo.ArticleVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -58,6 +60,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, ArticleModel>
         LambdaQueryWrapper<ArticleModel> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ArticleModel::getStatus, StatusEnum.NORMAL.getCode());
         return articleMapper.selectCount(wrapper);
+    }
+
+    @Override
+    public Result saveArticle(Result result, ArticleVo vo) throws Exception {
+        articleMapper.insert(vo);
+        return result;
     }
 }
 
