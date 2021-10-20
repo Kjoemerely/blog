@@ -1,6 +1,9 @@
 server:
   port: 5133
 spring:
+  servlet:
+    multipart:
+      enabled: true
   application:
     name: my-blog
   datasource:
@@ -16,7 +19,7 @@ spring:
     cache: false
 logging:
     file:
-        path: d:\home\log-blog
+      path: d:/home/blog/log
     pattern:
         # 日志打印格式
         console: '%-5level [%contextName] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger{10}.%method -%msg%n'

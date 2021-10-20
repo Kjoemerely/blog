@@ -1,5 +1,6 @@
 package com.qk.blog.config;
 
+import com.qk.blog.enums.CommonConstant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -26,7 +27,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
+        // 静态资源
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        // 文件上传
+        registry.addResourceHandler("/upload/**").addResourceLocations("file:" + CommonConstant.FILE_UPLOAD_DIC);
         // 解决 SWAGGER 404报错
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");

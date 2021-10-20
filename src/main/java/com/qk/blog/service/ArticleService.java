@@ -28,6 +28,8 @@ public interface ArticleService extends IService<ArticleModel> {
     IPage<ArticlePageVo> getArticlePage(ArticleSearchCmd cmd);
 
     ArticlePageVo getById(Long id);
+
+    Integer getArticleCount();
 }
 
 

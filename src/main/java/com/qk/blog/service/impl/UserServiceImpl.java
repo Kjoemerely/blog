@@ -24,8 +24,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -109,7 +109,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserModel> implemen
         loginUserVo.setToken(UuidUtil.getUuid());
         result.setData(loginUserVo);
         // 写入日志
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         SysLogModel sysLogModel = new SysLogModel();
         sysLogModel.setFirstType(LogTypeEnum.USER.getCode());
         sysLogModel.setFirstTypeName(LogTypeEnum.USER.getMessage());
@@ -117,7 +117,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserModel> implemen
         sysLogModel.setSecondTypeName(LogTypeEnum.LOGIN.getMessage());
         sysLogModel.setBusinessId(userModel.getId());
         sysLogModel.setBusinessName(userModel.getUserName());
-        sysLogModel.setContent(userModel.getUserName() + "在" + sdf.format(LocalDateTime.now()) + "登录了系统");
+        sysLogModel.setContent(userModel.getUserName() + "在" + formatter.format(LocalDateTime.now()) + "登录了系统");
         sysLogModel.setIpAddress(loginIp);
         sysLogModel.setHost(WebContextUtil.getRequest().getRemoteHost());
         sysLogModel.setBrowser(Objects.requireNonNull(RequestUtil.getBrowser(request)).getName());
@@ -136,7 +136,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserModel> implemen
      */
     @Override
     public Result register(Result result, UserVo userVo) throws Exception {
-        return null;
+        userMapper.insert(userVo);
+        return result;
     }
 
     /**

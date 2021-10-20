@@ -16,6 +16,7 @@ public interface TagService extends IService<TagModel> {
 
     int batchInsert(List<TagModel> list);
 
+    Integer getTagCount();
 }
 
 

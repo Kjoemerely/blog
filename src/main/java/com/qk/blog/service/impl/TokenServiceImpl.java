@@ -37,7 +37,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public String createToken(LoginUserVo loginUserVo) {
         String token = UuidUtil.getUuid();
-        redisUtil.set("token:" + token, loginUserVo);
+        redisUtil.set(token, loginUserVo);
         redisUtil.set("userId:" + loginUserVo.getId(), token, EXPIRES_TIME);
         return token;
     }

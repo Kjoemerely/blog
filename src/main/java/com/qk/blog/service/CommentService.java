@@ -16,6 +16,7 @@ public interface CommentService extends IService<CommentModel> {
 
     int batchInsert(List<CommentModel> list);
 
+    Integer getCommentCount();
 }
 
 

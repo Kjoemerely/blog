@@ -9,6 +9,11 @@ public class CommonConstant {
     /**
      * 本应用ID
      */
+    public static final String FILE_UPLOAD_DIC = "D:/home/blog/upload/";
+
+    /**
+     * 本应用ID
+     */
     public static final String APP_ID = "CP_PLATFORM";
 
     /**

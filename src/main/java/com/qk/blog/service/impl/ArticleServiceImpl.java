@@ -1,9 +1,11 @@
 package com.qk.blog.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qk.blog.dao.ArticleMapper;
+import com.qk.blog.enums.StatusEnum;
 import com.qk.blog.model.ArticleModel;
 import com.qk.blog.service.ArticleService;
 import com.qk.blog.vo.ArticlePageVo;
@@ -49,6 +51,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, ArticleModel>
     @Override
     public ArticlePageVo getById(Long id) {
         return articleMapper.getById(id);
+    }
+
+    @Override
+    public Integer getArticleCount() {
+        LambdaQueryWrapper<ArticleModel> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ArticleModel::getStatus, StatusEnum.NORMAL.getCode());
+        return articleMapper.selectCount(wrapper);
     }
 }
 

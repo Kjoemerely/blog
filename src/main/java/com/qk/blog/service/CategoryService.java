@@ -16,6 +16,9 @@ public interface CategoryService extends IService<CategoryModel> {
 
     int batchInsert(List<CategoryModel> list);
 
+    Integer getCategoryCount();
+
+    List<CategoryModel> getAllCategorys();
 }
 
 

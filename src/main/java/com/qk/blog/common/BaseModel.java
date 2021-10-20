@@ -1,6 +1,8 @@
 package com.qk.blog.common;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -26,6 +28,7 @@ public class BaseModel {
     private String createUserName;
 
     @ApiModelProperty(value = "创建时间")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createTime;
 
@@ -35,7 +38,8 @@ public class BaseModel {
     @ApiModelProperty(value="修改人名称")
     private String updateUserName;
 
-    @ApiModelProperty(value="修改时间")
+    @ApiModelProperty(value = "修改时间")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime updateTime;
 }
