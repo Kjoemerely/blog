@@ -27,8 +27,6 @@ public class UserController extends BaseController {
     @Resource
     private ArticleService articleService;
     @Resource
-    private TokenService tokenService;
-    @Resource
     private CategoryService categoryService;
     @Resource
     private TagService tagService;
@@ -51,18 +49,10 @@ public class UserController extends BaseController {
         Result result = getResult();
         try {
             result = userService.login(result, username, password);
-            if (Result.RESULT_SUCCESS.equals(result.getCode())) {
-                LoginUserVo loginUserVo = (LoginUserVo) result.getData();
-                // 放到redis上
-                String token = tokenService.createToken(loginUserVo);
-                // 把token放到header
-                session.setAttribute("header", token);
-                return "index";
-            }
         } catch (Exception e) {
             error(result, e);
         }
-        return "user/login";
+        return Result.RESULT_SUCCESS.equals(result.getCode()) ? "index" : "user/login";
     }
 
     @RequestMapping("/user/edit")

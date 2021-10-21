@@ -37,21 +37,6 @@ public class CommonConstant {
     public static final String APP_DICT_ALL = "PLATFORM_DICT_ALL";
 
     /**
-     * 单位ID前缀
-     */
-    public static final String COMPANY_PREFIX = "C";
-
-    /**
-     * 组织ID前缀
-     */
-    public static final String TEAM_PREFIX = "T";
-
-    /**
-     * 用户ID前缀
-     */
-    public static final String USER_PREFIX = "U";
-
-    /**
      * 状态值：正常
      */
     public static final String STATUS_NORMAL = "NORMAL";
@@ -74,17 +59,7 @@ public class CommonConstant {
     /**
      * token名称
      */
-    public static final String DEFAULT_TOKEN_NAME = "Blog-Token";
-
-    /**
-     * header头请求应用ID
-     */
-    public static final String REQUEST_APP_ID = "Request-App-Id";
-
-    /**
-     * token名称
-     */
-    public static final String REQUEST_TOKEN_NAME = "Request-App-Token";
+    public static final String REQUEST_TOKEN_NAME = "Request-User-Token";
     
     /**
      * 操作成功
@@ -100,11 +75,6 @@ public class CommonConstant {
      * 是否开启Swagger
      */
     public static final boolean IF_OPEN_SWAGGER = true;
-
-    /**
-     * 根节点id
-     */
-    public static final String ROOT_NODE_ID = "#";
 
 
     /**

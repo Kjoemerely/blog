@@ -34,7 +34,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a th:class="${path}=='edit'?'nav-link active':'nav-link'" th:href="@{/admin/blogs/edit}">
+                    <a th:class="${path}=='edit'?'nav-link active':'nav-link'" th:href="@{/article/edit}">
                         <i class="nav-icon fa fa fa-pencil-square-o"></i>
                         <p>
                             发布博客
@@ -43,7 +43,7 @@
                 </li>
                 <li class="nav-header">管理模块</li>
                 <li class="nav-item">
-                    <a th:class="${path}=='blogs'?'nav-link active':'nav-link'" th:href="@{/admin/blogs}">
+                    <a th:class="${path}=='blogs'?'nav-link active':'nav-link'" th:href="@{/article/toArticleList}">
                         <i aria-hidden="true" class="fa fa-list-alt nav-icon"></i>
                         <p>
                             博客管理

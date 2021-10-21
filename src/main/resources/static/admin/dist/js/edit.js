@@ -83,7 +83,7 @@ $(function () {
 });
 
 $('#confirmButton').click(function () {
-    var title = $('#blogTitle').val();
+    var title = $('#title').val();
     console.log(title);
     // var blogSubUrl = $('#blogSubUrl').val();
     var categoryId = $('#categoryId').val();
@@ -141,14 +141,14 @@ $('#confirmButton').click(function () {
 });
 
 $('#saveButton').click(function () {
-    var id = $('#blogId').val();
-    var title = $('#blogName').val();
+    var id = $('#id').val();
+    var title = $('#title').val();
     // var blogSubUrl = $('#blogSubUrl').val();
-    var categoryId = $('#blogCategoryId').val();
-    var tagIds = $('#blogTags').val();
+    var categoryId = $('#categoryId').val();
+    var tagIds = $('#tagIds').val();
     var content = blogEditor.getMarkdown();
-    var coverImage = $('#blogCoverImage')[0].src;
-    var status = $("input[name='blogStatus']:checked").val();
+    var coverImage = $('#coverImage')[0].src;
+    var status = $("input[name='status']:checked").val();
     var enableComment = $("input[name='enableComment']:checked").val();
     if (isNull(coverImage) || coverImage.indexOf('img-upload') !== -1) {
         swal("封面图片不能为空", {
@@ -169,7 +169,7 @@ $('#saveButton').click(function () {
         "enableComment": enableComment
     };
     if (id > 0) {
-        url = '/admin/blogs/update';
+        url = '/article/update';
         swlMessage = '修改成功';
         data = {
             "id": id,
@@ -200,7 +200,7 @@ $('#saveButton').click(function () {
                     confirmButtonClass: 'btn btn-success',
                     buttonsStyling: false
                 }).then(function () {
-                    window.location.href = "/article/getArticlePage";
+                    window.location.href = "/article/toArticleList";
                 })
             }
             else {

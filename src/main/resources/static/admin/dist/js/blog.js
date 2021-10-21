@@ -1,14 +1,14 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: '/admin/blogs/list',
+        url: '/article/articleList',
         datatype: "json",
         colModel: [
-            {label: 'id', name: 'blogId', index: 'blogId', width: 50, key: true, hidden: true},
-            {label: '标题', name: 'blogTitle', index: 'blogTitle', width: 140},
-            {label: '预览图', name: 'blogCoverImage', index: 'blogCoverImage', width: 120, formatter: coverImageFormatter},
+            {label: 'id', name: 'id', index: 'id', width: 50, key: true, hidden: true},
+            {label: '标题', name: 'title', index: 'title', width: 140},
+            {label: '预览图', name: 'coverImage', index: 'coverImage', width: 120, formatter: coverImageFormatter},
             {label: '浏览量', name: 'blogViews', index: 'blogViews', width: 60},
-            {label: '状态', name: 'blogStatus', index: 'blogStatus', width: 60, formatter: statusFormatter},
-            {label: '博客分类', name: 'blogCategoryName', index: 'blogCategoryName', width: 60},
+            {label: '状态', name: 'status', index: 'status', width: 60, formatter: statusFormatter},
+            {label: '博客分类', name: 'categoryName', index: 'categoryName', width: 60},
             {label: '添加时间', name: 'createTime', index: 'createTime', width: 90}
         ],
         height: 700,
@@ -22,10 +22,10 @@ $(function () {
         multiselect: true,
         pager: "#jqGridPager",
         jsonReader: {
-            root: "data.list",
-            page: "data.currPage",
-            total: "data.totalPage",
-            records: "data.totalCount"
+            root: "data.records",
+            page: "data.current",
+            total: "data.total",
+            records: "data.total"
         },
         prmNames: {
             page: "page",
@@ -47,11 +47,10 @@ $(function () {
     }
 
     function statusFormatter(cellvalue) {
-        if (cellvalue == 0) {
+        if (cellvalue == '草稿') {
             return "<button type=\"button\" class=\"btn btn-block btn-secondary btn-sm\" style=\"width: 50%;\">草稿</button>";
-        }
-        else if (cellvalue == 1) {
-            return "<button type=\"button\" class=\"btn btn-block btn-success btn-sm\" style=\"width: 50%;\">发布</button>";
+        } else if (cellvalue == '正常') {
+            return "<button type=\"button\" class=\"btn btn-block btn-success btn-sm\" style=\"width: 50%;\">已发布</button>";
         }
     }
 
@@ -62,21 +61,21 @@ $(function () {
  */
 function search() {
     //标题关键字
-    var keyword = $('#keyword').val();
-    if (!validLength(keyword, 20)) {
+    var searchValue = $('#searchValue').val();
+    if (!validLength(searchValue, 20)) {
         swal("搜索字段长度过大!", {
             icon: "error",
         });
         return false;
     }
     //数据封装
-    var searchData = {keyword: keyword};
+    var searchData = {searchValue: searchValue};
     //传入查询条件参数
     $("#jqGrid").jqGrid("setGridParam", {postData: searchData});
     //点击搜索按钮默认都从第一页开始
     $("#jqGrid").jqGrid("setGridParam", {page: 1});
     //提交post并刷新表格
-    $("#jqGrid").jqGrid("setGridParam", {url: '/admin/blogs/list'}).trigger("reloadGrid");
+    $("#jqGrid").jqGrid("setGridParam", {url: '/article/articleList'}).trigger("reloadGrid");
 }
 
 /**
@@ -90,7 +89,7 @@ function reload() {
 }
 
 function addBlog() {
-    window.location.href = "/admin/blogs/edit";
+    window.location.href = "/article/edit";
 }
 
 function editBlog() {
@@ -98,7 +97,7 @@ function editBlog() {
     if (id == null) {
         return;
     }
-    window.location.href = "/admin/blogs/edit/" + id;
+    window.location.href = "/article/edit/" + id;
 }
 
 function deleteBlog() {
@@ -116,11 +115,11 @@ function deleteBlog() {
             if (flag) {
                 $.ajax({
                     type: "POST",
-                    url: "/admin/blogs/delete",
+                    url: "/article/delete",
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {
-                        if (r.resultCode == 200) {
+                        if (r.resultCode == '0') {
                             swal("删除成功", {
                                 icon: "success",
                             });

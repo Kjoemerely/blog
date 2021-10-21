@@ -88,7 +88,7 @@ public class MapperAspect {
             if (methodName.startsWith("insert") || methodName.startsWith("add") || methodName.startsWith("save")) {
                 baseModel.setStatus(StatusEnum.NORMAL.getCode());
                 if (baseModel.getCreateUserId() == null || baseModel.getCreateUserName() == null) {
-                    userModel = getuserModel(method);
+                    userModel = getUserModel(method);
                     baseModel.setCreateUserId(userModel.getId());
                     baseModel.setCreateUserName(userModel.getUserName());
                 }
@@ -98,7 +98,7 @@ public class MapperAspect {
             }
             if (baseModel.getUpdateUserId() == null || baseModel.getUpdateUserName() == null) {
                 if (userModel == null) {
-                    userModel = getuserModel(method);
+                    userModel = getUserModel(method);
                 }
                 baseModel.setUpdateUserId(userModel.getId());
                 baseModel.setUpdateUserName(userModel.getUserName());
@@ -110,7 +110,7 @@ public class MapperAspect {
 
     }
 
-    private UserModel getuserModel(Method method) throws Exception {
+    private UserModel getUserModel(Method method) throws Exception {
         UserModel userModel;
         if (!method.isAnnotationPresent(IgnoreLoginUser.class) && !isLogUpdate(method)) {
             //获取登录用户信息

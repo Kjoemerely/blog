@@ -3,9 +3,12 @@ package com.qk.blog.config;
 import com.qk.blog.enums.CommonConstant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.annotation.Resource;
 
 /**
  * @author qk
@@ -14,10 +17,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
+    @Resource
+    private AdminInterceptor adminInterceptor;
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("user/login");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(adminInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login")
+        ;
     }
 
     /**

@@ -16,6 +16,7 @@ public enum StatusEnum {
     NORMAL("NORMAL", "正常"),
     DELETED("DELETED", "已删除"),
     DRAFT("DRAFT", "草稿"),
+    PUBLISHED("PUBLISHED", "已发布"),
     ENABLE("ENABLE", "允许"),
     DISABLE("DISABLE", "禁止"),
     ;

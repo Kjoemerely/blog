@@ -35,8 +35,3 @@ public interface ArticleService extends IService<ArticleModel> {
 
     Result saveArticle(Result result, ArticleVo vo) throws Exception;
 }
-
-
-
-
-

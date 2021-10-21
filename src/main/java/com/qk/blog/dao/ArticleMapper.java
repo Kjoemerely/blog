@@ -13,11 +13,10 @@ import java.util.List;
 
 /**
  * @author qk
- * @since 2021/10/14 14:45
+ * @since 2021/10/21 13:51
  */
 @Mapper
 public interface ArticleMapper extends BaseMapper<ArticleModel> {
-
     int updateBatch(List<ArticleModel> list);
 
     int batchInsert(@Param("list") List<ArticleModel> list);

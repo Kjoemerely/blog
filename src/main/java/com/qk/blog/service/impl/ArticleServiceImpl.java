@@ -9,12 +9,15 @@ import com.qk.blog.dao.ArticleMapper;
 import com.qk.blog.enums.StatusEnum;
 import com.qk.blog.model.ArticleModel;
 import com.qk.blog.service.ArticleService;
+import com.qk.blog.utils.EnumUtil;
 import com.qk.blog.vo.ArticlePageVo;
 import com.qk.blog.vo.ArticleSearchCmd;
 import com.qk.blog.vo.ArticleVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -23,6 +26,8 @@ import java.util.List;
  */
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, ArticleModel> implements ArticleService {
+
+    private static final LinkedHashMap<String, String> statusMap = EnumUtil.enumToMap(StatusEnum.class);
 
     @Resource
     private ArticleMapper articleMapper;
@@ -47,6 +52,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, ArticleModel>
     public IPage<ArticlePageVo> getArticlePage(ArticleSearchCmd cmd) {
         Page<ArticlePageVo> page = new Page<>(cmd.getPage(), cmd.getRows());
         IPage<ArticlePageVo> iPage = articleMapper.getArticlePage(page, cmd);
+        for (ArticlePageVo record : iPage.getRecords()) {
+            record.setStatus(statusMap.get(record.getStatus()));
+        }
         return iPage;
     }
 
@@ -64,10 +72,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, ArticleModel>
 
     @Override
     public Result saveArticle(Result result, ArticleVo vo) throws Exception {
-        articleMapper.insert(vo);
+        ArticleModel model = new ArticleModel();
+        BeanUtils.copyProperties(vo, model);
+        articleMapper.insert(model);
         return result;
     }
 }
+
 
 
 

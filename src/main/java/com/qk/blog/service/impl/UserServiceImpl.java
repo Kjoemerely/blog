@@ -106,8 +106,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserModel> implemen
         String loginIp = NetworkUtil.getIpAddress(request);
         LoginUserVo loginUserVo = new LoginUserVo();
         BeanUtils.copyProperties(userModel, loginUserVo);
-        loginUserVo.setToken(UuidUtil.getUuid());
+        // 存入redis
+        String token = tokenService.createToken(loginUserVo);
+        loginUserVo.setToken(token);
         result.setData(loginUserVo);
+        // 放入session
+        request.getSession().setAttribute("token", token);
         // 写入日志
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         SysLogModel sysLogModel = new SysLogModel();

@@ -25,11 +25,6 @@ logging:
         console: '%-5level [%contextName] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger{10}.%method -%msg%n'
         # 时间格式
         dateformat: yyyy-MM-dd HH:mm:ss.SSS
-    level:
-        # 目录日志级别
-        org.springframework: info
-        org.apache.ibatis: debug
-        org.springframework.transaction: info
-        org.springframework.jdbc: info
-        org.mybatis: debug
-        java.sql: debug
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

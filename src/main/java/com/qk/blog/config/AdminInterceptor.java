@@ -1,6 +1,6 @@
 package com.qk.blog.config;
 
-import com.qk.blog.vo.LoginUserVo;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -12,26 +12,24 @@ import java.io.IOException;
  * @author qk
  * @since 2021/10/18 17:30
  */
+@Component
 public class AdminInterceptor implements HandlerInterceptor {
 
     /**
      * 在请求处理之前进行调用（Controller方法调用之前）
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        try {
-            //统一拦截（查询当前session是否存在user）(这里user会在每次登陆成功后，写入session)
-            LoginUserVo user = (LoginUserVo) request.getSession().getAttribute("USER");
-            if(user!=null){
-                return true;
-            }
-            response.sendRedirect(request.getContextPath()+"你的登陆页地址");
-        } catch (IOException e) {
-            e.printStackTrace();
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+        String requestServletPath = request.getServletPath();
+        Object token = request.getSession().getAttribute("token");
+        if (null == token) {
+            request.getSession().setAttribute("errorMsg", "请重新登陆");
+            response.sendRedirect(request.getContextPath() + "/login");
+            return false;
+        } else {
+            request.getSession().removeAttribute("errorMsg");
+            return true;
         }
-        return false;
-        //如果设置为false时，被请求时，拦截器执行到此处将不会继续操作
-        //如果设置为true时，请求将会继续执行后面的操作
     }
 
     /**
@@ -39,7 +37,7 @@ public class AdminInterceptor implements HandlerInterceptor {
      */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-        request.setAttribute("header","");
+
     }
 
     /**
@@ -47,7 +45,7 @@ public class AdminInterceptor implements HandlerInterceptor {
      */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-//        System.out.println("执行了TestInterceptor的afterCompletion方法");
+
     }
 
 }
