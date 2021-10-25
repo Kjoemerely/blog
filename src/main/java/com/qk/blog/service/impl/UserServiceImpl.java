@@ -62,18 +62,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserModel> implemen
      */
     @Override
     public LoginUserVo getLoginUser() throws ResultException {
-        //通过token获取用户信息
+        // 从session中获取token
         String token = TokenUtil.getToken();
-        LoginUserVo userInfo = tokenService.getLoginInfo(token);
-
-        //判断用户是否失效
-        if(userInfo == null){
+        if (StringUtils.isBlank(token)) {
             throw new ResultException(ErrorResultEnum.USER_LOGIN_TIME_EXPIRED);
         }
-        String redisToken = (String)redisUtil.get("userId:" + userInfo.getId());
-        if(StringUtils.isEmpty(redisToken)){
+        // 根据token获取用户信息
+        LoginUserVo userInfo = tokenService.getLoginInfo(token);
+        //判断用户是否失效
+        if (userInfo == null) {
             throw new ResultException(ErrorResultEnum.USER_LOGIN_TIME_EXPIRED);
-        }else if(!token.equals(redisToken)){
+        }
+        String redisToken = (String) redisUtil.get("userId:" + userInfo.getId());
+        if (StringUtils.isEmpty(redisToken)) {
+            throw new ResultException(ErrorResultEnum.USER_LOGIN_TIME_EXPIRED);
+        } else if (!token.equals(redisToken)) {
             redisUtil.del("token:" + token);
             throw new ResultException(ErrorResultEnum.USER_LOGIN_REMOTE_ERROR);
         }

@@ -1,14 +1,11 @@
 package com.qk.blog.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qk.blog.common.BaseController;
 import com.qk.blog.common.Result;
 import com.qk.blog.enums.StatusEnum;
-import com.qk.blog.model.ArticleModel;
 import com.qk.blog.service.ArticleService;
 import com.qk.blog.service.CategoryService;
 import com.qk.blog.utils.EnumUtil;
-import com.qk.blog.vo.ArticlePageVo;
 import com.qk.blog.vo.ArticleSearchCmd;
 import com.qk.blog.vo.ArticleVo;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -17,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 
 /**
@@ -44,27 +40,32 @@ public class ArticleController extends BaseController {
     @ResponseBody
     public Result getArticleList(@RequestBody ArticleSearchCmd cmd) {
         Result result = getResult();
-        IPage<ArticlePageVo> page = articleService.getArticlePage(cmd);
-        result.setData(page);
+        try {
+            result = articleService.getArticleList(result, cmd);
+        } catch (Exception e) {
+            error(result, e);
+        }
         return result;
     }
 
     @GetMapping("/edit")
-    public String edit(HttpServletRequest request, Model model) {
-//        request.setAttribute("path", "edit");
-//        request.setAttribute("categories", categoryService.getAllCategorys());
+    public String edit(Model model) {
         model.addAttribute("categories", categoryService.getAllCategorys());
         return "article/articleEdit";
     }
 
     @GetMapping("/edit/{blogId}")
-    public String edit(Model model, @PathVariable("blogId") Long blogId) {
-//        model.setAttribute("path", "edit");
-        ArticleModel article = articleService.getById(blogId);
-        if (article == null) {
+    public String edit(Model model, @PathVariable("blogId") String blogId) {
+        ArticleVo articleVo = new ArticleVo();
+        try {
+            articleVo = articleService.getById(Long.valueOf(blogId));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (articleVo == null) {
             return "error/error_400";
         }
-        model.addAttribute("blog", article);
+        model.addAttribute("blog", articleVo);
         model.addAttribute("categories", categoryService.getAllCategorys());
         return "article/articleEdit";
     }
@@ -75,19 +76,31 @@ public class ArticleController extends BaseController {
         try {
             result = articleService.saveArticle(result, vo);
         } catch (Exception e) {
-            e.printStackTrace();
-            result.setCode(Result.RESULT_ERROR);
-            result.setMessage("保存文章失败！");
+            error(result, e, "保存文章失败！");
         }
         return result;
     }
 
-    @GetMapping("getById")
-    public String get(Model model, Long id) {
-        ArticlePageVo vo = articleService.getById(id);
-        model.addAttribute("vo", vo);
-        model.addAttribute("statusList", statusEnumMap);
-        return "article/articleDetail";
+    @RequestMapping("/update")
+    @ResponseBody
+    public Result update(Result result, @RequestBody ArticleVo vo) {
+        try {
+            result = articleService.updateArticle(result, vo);
+        } catch (Exception e) {
+            error(result, e, "修改文章失败！");
+        }
+        return result;
+    }
+
+    @RequestMapping("/delete")
+    @ResponseBody
+    public Result delete(Result result, @RequestParam Long id) {
+        try {
+            result = articleService.deleteArticle(result, id);
+        } catch (Exception e) {
+            error(result, e, "删除文章失败！");
+        }
+        return result;
     }
 
 }

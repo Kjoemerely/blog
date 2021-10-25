@@ -27,7 +27,7 @@ import java.util.List;
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, ArticleModel> implements ArticleService {
 
-    private static final LinkedHashMap<String, String> statusMap = EnumUtil.enumToMap(StatusEnum.class);
+    private final LinkedHashMap<String, String> statusMap = EnumUtil.enumToMap(StatusEnum.class);
 
     @Resource
     private ArticleMapper articleMapper;
@@ -43,26 +43,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, ArticleModel>
     }
 
     /**
-     * 文章分页
+     * 查询文章数量
      *
-     * @param cmd 查询条件
-     * @return 文章分页
+     * @return 文章数量
      */
-    @Override
-    public IPage<ArticlePageVo> getArticlePage(ArticleSearchCmd cmd) {
-        Page<ArticlePageVo> page = new Page<>(cmd.getPage(), cmd.getRows());
-        IPage<ArticlePageVo> iPage = articleMapper.getArticlePage(page, cmd);
-        for (ArticlePageVo record : iPage.getRecords()) {
-            record.setStatus(statusMap.get(record.getStatus()));
-        }
-        return iPage;
-    }
-
-    @Override
-    public ArticlePageVo getById(Long id) {
-        return articleMapper.getById(id);
-    }
-
     @Override
     public Integer getArticleCount() {
         LambdaQueryWrapper<ArticleModel> wrapper = new LambdaQueryWrapper<>();
@@ -70,6 +54,45 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, ArticleModel>
         return articleMapper.selectCount(wrapper);
     }
 
+    /**
+     * 文章分页
+     *
+     * @param result 通用返回结果
+     * @param cmd    查询条件
+     * @return 文章分页
+     * @throws Exception 异常信息
+     */
+    @Override
+    public Result getArticleList(Result result, ArticleSearchCmd cmd) throws Exception {
+        Page<ArticlePageVo> page = new Page<>(cmd.getPage(), cmd.getRows());
+        IPage<ArticlePageVo> iPage = articleMapper.getArticlePage(page, cmd);
+        for (ArticlePageVo record : iPage.getRecords()) {
+            record.setStatus(statusMap.get(record.getStatus()));
+        }
+        result.setData(iPage);
+        return result;
+    }
+
+    /**
+     * 查询文章详情
+     *
+     * @param id 文章id
+     * @return 文章详情
+     * @throws Exception 异常信息
+     */
+    @Override
+    public ArticleVo getById(Long id) throws Exception {
+        return articleMapper.getById(id);
+    }
+
+    /**
+     * 保存文章
+     *
+     * @param result 通用返回结果
+     * @param vo     文章信息
+     * @return 通用返回结果
+     * @throws Exception 异常信息
+     */
     @Override
     public Result saveArticle(Result result, ArticleVo vo) throws Exception {
         ArticleModel model = new ArticleModel();
@@ -77,10 +100,33 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, ArticleModel>
         articleMapper.insert(model);
         return result;
     }
+
+    /**
+     * 修改文章
+     *
+     * @param result 通用返回结果
+     * @param vo     文章信息
+     * @return 通用返回结果
+     * @throws Exception 异常信息
+     */
+    @Override
+    public Result updateArticle(Result result, ArticleVo vo) throws Exception {
+        articleMapper.updateById(vo);
+        return result;
+    }
+
+    /**
+     * 删除文章
+     *
+     * @param result 通用返回结果
+     * @param id     文章id
+     * @return 通用返回结果
+     * @throws Exception 异常信息
+     */
+    @Override
+    public Result deleteArticle(Result result, Long id) throws Exception {
+        articleMapper.deleteById(id);
+        return result;
+    }
+
 }
-
-
-
-
-
-

@@ -129,12 +129,17 @@
                 ) t ON t.article_id = a.id
                      LEFT JOIN (SELECT article_id, count(*) num from COMMENT GROUP BY article_id) cmt
                 ON cmt.article_id = a.id
-        <if test="cmd.searchValue != null and cmd.searchValue != ''">
-            and a.title like concat('%', #{searchValue,jdbcType=VARCHAR}, '%')
-        </if>
+        <where>
+            <if test="cmd.searchValue != null and cmd.searchValue != ''">
+                and a.title like concat('%', #{cmd.searchValue,jdbcType=VARCHAR}, '%')
+            </if>
+        </where>
     </select>
 
-    <select id="getById" resultMap="pageMap">
+    <resultMap id="detailMap" extends="BaseResultMap" type="com.qk.blog.vo.ArticleVo">
+
+    </resultMap>
+    <select id="getById" resultMap="detailMap">
         SELECT a.*,
                c.NAME category_name,
                t.NAME tag_name,
@@ -150,6 +155,6 @@
                 ) t ON t.article_id = a.id
                      LEFT JOIN (SELECT article_id, count(*) num from COMMENT GROUP BY article_id) cmt
                 ON cmt.article_id = a.id
-        WHERE a.status = 'NORMAL'
+        WHERE a.status = 'NORMAL' and a.id = #{id,jdbcType=BIGINT}
     </select>
 </mapper>

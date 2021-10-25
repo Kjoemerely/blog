@@ -5,6 +5,7 @@ import com.qk.blog.common.BaseController;
 import com.qk.blog.common.Result;
 import com.qk.blog.service.TokenService;
 import com.qk.blog.utils.TokenUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -49,11 +50,16 @@ public class SecurityAspect extends BaseController {
         }
         //通过token获取用户信息
         String token = TokenUtil.getToken();
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        if (StringUtils.isBlank(token)) {
+            // 跳转回登录页面，并返回错误信息
+            request.getSession().setAttribute("errorMsg", "用户未登录");
+            return "user/login";
+        }
         // 校验用户登录情况
         Result result = tokenService.checkLoginUser(token);
         if (result != null && !Result.RESULT_SUCCESS.equals(result.getCode())) {
             // 跳转回登录页面，并返回错误信息
-            HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
             request.getSession().setAttribute("errorMsg", result.getMessage());
             return "user/login";
         }

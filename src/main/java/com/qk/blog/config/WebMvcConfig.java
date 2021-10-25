@@ -29,15 +29,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(adminInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/login")
+                .addPathPatterns("/article")
+                .addPathPatterns("/user")
+                .excludePathPatterns("/user/toLogin")
         ;
     }
 
     /**
      * 防止@EnableMvc把默认的静态资源路径覆盖了，手动设置的方式
      *
-     * @param registry
+     * @param registry 资源注册器
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

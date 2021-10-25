@@ -66,10 +66,10 @@ public class TokenServiceImpl implements TokenService {
     }
 
     /**
-     * token获取id值
+     * token获取用户信息
      *
      * @param token token
-     * @return
+     * @return 用户信息
      */
     @Override
     public LoginUserVo getLoginInfo(String token) {
@@ -78,6 +78,10 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public void deleteToken(String token) {
+        LoginUserVo loginUserVo = getLoginInfo(token);
+        if (loginUserVo != null) {
+            redisUtil.del("userId:" + loginUserVo.getId());
+        }
         redisUtil.del("token:" + token);
     }
 

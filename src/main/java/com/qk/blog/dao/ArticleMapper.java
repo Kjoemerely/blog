@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qk.blog.model.ArticleModel;
 import com.qk.blog.vo.ArticlePageVo;
 import com.qk.blog.vo.ArticleSearchCmd;
+import com.qk.blog.vo.ArticleVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,7 +22,7 @@ public interface ArticleMapper extends BaseMapper<ArticleModel> {
 
     int batchInsert(@Param("list") List<ArticleModel> list);
 
-    IPage<ArticlePageVo> getArticlePage(Page<ArticlePageVo> page, ArticleSearchCmd cmd);
+    IPage<ArticlePageVo> getArticlePage(Page<ArticlePageVo> page, @Param("cmd") ArticleSearchCmd cmd);
 
-    ArticlePageVo getById(Long id);
+    ArticleVo getById(Long id);
 }

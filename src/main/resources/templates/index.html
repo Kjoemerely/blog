@@ -41,14 +41,14 @@
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
-                                <h3 th:text="${blogCount}">65</h3>
+                                <h3 th:text="${blogCount} == null ? 0 : ${blogCount}"></h3>
 
                                 <p>总文章数</p>
                             </div>
                             <div class="icon">
                                 <i class="fa fa-list-alt"></i>
                             </div>
-                            <a class="small-box-footer" th:href="@{/article/getArticlePage}">More info <i
+                            <a class="small-box-footer" th:href="@{/article/toArticleList}">More info <i
                                     class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>

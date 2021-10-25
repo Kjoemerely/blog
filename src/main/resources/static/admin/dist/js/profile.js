@@ -39,7 +39,7 @@ $(function () {
                     console.log(r);
                     if (r == 'success') {
                         alert('修改成功');
-                        window.location.href = '/admin/login';
+                        window.location.href = '/user/login';
                     } else {
                         alert('修改失败');
                         $("#updatePasswordButton").attr("disabled",false);

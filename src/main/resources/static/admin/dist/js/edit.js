@@ -220,7 +220,7 @@ $('#saveButton').click(function () {
 });
 
 $('#cancelButton').click(function () {
-    window.location.href = "/article/getArticlePage";
+    window.location.href = "/article/articleList";
 });
 
 /**
@@ -228,6 +228,6 @@ $('#cancelButton').click(function () {
  */
 $('#randomCoverImage').click(function () {
     var rand = parseInt(Math.random() * 40 + 1);
-    $("#blogCoverImage").attr("src", '/admin/dist/img/rand/' + rand + ".jpg");
-    $("#blogCoverImage").attr("style", "width:160px ;height: 120px;display:block;");
+    $("#coverImage").attr("src", '/admin/dist/img/rand/' + rand + ".jpg");
+    $("#coverImage").attr("style", "width:160px ;height: 120px;display:block;");
 });

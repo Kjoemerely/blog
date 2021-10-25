@@ -2,7 +2,6 @@ package com.qk.blog.common;
 
 import com.qk.blog.exception.ResultException;
 import com.qk.blog.service.SysLogService;
-import com.qk.blog.service.UserService;
 import com.qk.blog.vo.LoginUserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +18,10 @@ import javax.annotation.Resource;
 public class BaseController {
 
     @Resource
-    private UserService userService;
-    @Resource
     private SysLogService sysLogService;
+
+
+    protected LoginUserVo loginUserVo;
 
     /**
      * Logger日志
@@ -90,22 +90,13 @@ public class BaseController {
         return null;
     }
 
-//    public Result genSuccessResult(Result result) {
-//        if (Result.RESULT_SUCCESS.equals(result.getCode())) {
-//            return result;
-//        }
-//        if (Result.RESULT_ERROR.equals(result.getCode())) {
-//            return result;
-//        }
-//    }
-
-    /**
-     * 获取登录用户信息
-     *
-     * @return 登录用户信息
-     */
-    protected LoginUserVo getLoginUserInfo() throws Exception {
-        return userService.getLoginUser();
+    public void setLoginUser(LoginUserVo loginUserVo) {
+        loginUserVo = new LoginUserVo();
+        loginUserVo.setId(loginUserVo.getId());
+        loginUserVo.setUserName(loginUserVo.getUserName());
+        loginUserVo.setNickName(loginUserVo.getNickName());
+        loginUserVo.setSource(loginUserVo.getSource());
+        loginUserVo.setToken(loginUserVo.getToken());
     }
 
 }
